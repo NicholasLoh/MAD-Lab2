@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Player {
+//Serializable 是为了让player object可以在intent被pass过来
+public class Player implements Serializable {
     private int rowLocation;
     private int colLocation;
     int cash;
@@ -38,11 +40,7 @@ public class Player {
     }
 
     public boolean healthStatus(){
-        boolean health = false;
-        if(this.health > 0){
-            health = true;
-        }
-        return health;
+        return this.health > 0;
     }
 
     public void restart(){

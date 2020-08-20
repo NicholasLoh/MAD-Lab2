@@ -1,5 +1,8 @@
 package com.example.myapplication;
-abstract class Item {
+
+import java.io.Serializable;
+
+abstract class Item implements Serializable {
     String description;
     int value;
     boolean bought = false;

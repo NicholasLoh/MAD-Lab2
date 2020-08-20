@@ -7,9 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int RESULT_CODE_PLAY = 0;
     private TextView grid;
     private static TextView life;
     private static TextView cash;
@@ -47,6 +49,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK &&
+                requestCode == RESULT_CODE_PLAY) {
+            player = (Player) data.getSerializableExtra("player");
+            assert player != null;
+            double showHealth = player.showHealth();
+            int showCash = player.showCash();
+            double showMass = player.showMass();
+            life.setText(Double.toString(showHealth));
+            cash.setText(Integer.toString(showCash));
+            mass.setText(Double.toString(showMass));
+
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,9 +190,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openMarket() {
-        Intent intent = new Intent(this, MarketActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivityForResult(intent, 1);
+        //lec slide pg 21, 直接把整个player object pass给Market Activity
+        Intent market = MarketActivity.getIntent(MainActivity.this, player);
+        startActivityForResult(market, RESULT_CODE_PLAY);
     }
 
     public void openWild() {
@@ -181,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @SuppressLint("SetTextI18n")
+    /*@SuppressLint("SetTextI18n")
     public static void addEquipment(double Mass, Item item) {
         player.equipment.add(item);
         player.equipmentMass = player.equipmentMass + Mass;
@@ -227,5 +247,5 @@ public class MainActivity extends AppCompatActivity {
         player.equipmentMass = Mass;
         mass.setText(Double.toString(Mass));
     }
-
+*/
 }
